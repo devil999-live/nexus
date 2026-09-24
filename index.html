@@ -77,7 +77,7 @@
         <div id="username-screen" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
             <div class="bg-white dark:bg-slate-800 w-full max-w-md p-6 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700">
                 <h2 class="text-xl font-bold mb-2">Claim Your Unique Username</h2>
-                <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Choose a unique username (like Instagram). Note: Your username cannot be changed later, but your display name can be edited anytime.</p>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Choose a unique username (like Instagram). Your username cannot be changed later, but your display name can be edited anytime.</p>
                 
                 <form onsubmit="window.handleSaveUsername(event)" class="space-y-4">
                     <div>
@@ -106,17 +106,17 @@
             <aside class="w-full md:w-80 lg:w-96 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 flex flex-col h-full z-10">
                 <!-- User Profile Header -->
                 <div class="p-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full bg-brand-500 text-white flex items-center justify-center font-bold text-lg" id="current-user-avatar">U</div>
-                        <div>
-                            <h3 class="font-bold text-sm leading-tight flex items-center gap-1.5">
+                    <div class="flex items-center gap-3 cursor-pointer group" onclick="window.openProfileModal()" title="View Account Details">
+                        <div class="w-10 h-10 rounded-full bg-brand-500 text-white flex items-center justify-center font-bold text-lg shadow group-hover:ring-2 ring-brand-500 transition" id="current-user-avatar">U</div>
+                        <div class="min-w-0">
+                            <h3 class="font-bold text-sm leading-tight truncate group-hover:text-brand-500 transition flex items-center gap-1.5">
                                 <span id="current-user-name">Loading...</span>
-                                <button onclick="window.openEditProfileModal()" title="Edit Name" class="text-xs text-slate-400 hover:text-brand-500"><i class="fa-solid fa-pen"></i></button>
+                                <i class="fa-solid fa-circle-info text-xs text-slate-400"></i>
                             </h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400" id="current-user-handle">@username</p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 truncate" id="current-user-handle">@username</p>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-1">
                         <button onclick="window.toggleDarkMode()" title="Toggle Theme" class="p-2 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 rounded-lg">
                             <i class="fa-solid fa-moon"></i>
                         </button>
@@ -159,7 +159,7 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <div class="text-xs text-slate-400 font-mono hidden sm:block" id="active-chat-uid" title="Unique User ID"></div>
-                        <!-- Clear Chat Button -->
+                        <!-- Clear Chat Button (Fresh Start per user) -->
                         <button onclick="window.clearCurrentChat()" title="Clear Chat History" class="px-3 py-1.5 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 rounded-xl text-xs font-medium transition flex items-center gap-1.5">
                             <i class="fa-solid fa-trash-can"></i> <span class="hidden sm:inline">Clear Chat</span>
                         </button>
@@ -197,21 +197,47 @@
             </div>
         </div>
 
-        <!-- EDIT PROFILE MODAL -->
-        <div id="edit-profile-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <!-- ACCOUNT DETAILS & PROFILE MODAL -->
+        <div id="profile-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
             <div class="bg-white dark:bg-slate-800 w-full max-w-md p-6 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700">
-                <h2 class="text-xl font-bold mb-2">Edit Display Name</h2>
-                <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Update your display name. Your username remains permanent.</p>
-                <form onsubmit="window.handleUpdateProfileName(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">New Display Name</label>
-                        <input type="text" id="edit-display-name-input" required class="w-full px-3 py-2 border dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold">Account Profile</h2>
+                    <button onclick="window.closeProfileModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"><i class="fa-solid fa-xmark text-lg"></i></button>
+                </div>
+
+                <div class="space-y-4 text-sm">
+                    <div class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-900 rounded-xl">
+                        <div id="profile-modal-avatar" class="w-12 h-12 rounded-full bg-brand-500 text-white font-bold text-xl flex items-center justify-center shadow">U</div>
+                        <div class="min-w-0">
+                            <div id="profile-modal-name" class="font-bold truncate text-base">Name</div>
+                            <div id="profile-modal-handle" class="text-xs text-slate-500">@username</div>
+                        </div>
                     </div>
-                    <div class="flex justify-end gap-2">
-                        <button type="button" onclick="window.closeEditProfileModal()" class="px-4 py-2 bg-slate-200 dark:bg-slate-700 text-xs rounded-xl font-medium">Cancel</button>
-                        <button type="submit" class="px-4 py-2 bg-brand-600 text-white text-xs rounded-xl font-medium shadow">Save</button>
+
+                    <div class="space-y-2 border-t border-slate-200 dark:border-slate-700 pt-3">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-slate-500">Sign-in Method:</span>
+                            <span id="profile-auth-provider" class="font-semibold px-2 py-1 bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-300 rounded-md">Google</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-slate-500">Email Address:</span>
+                            <span id="profile-email" class="font-mono font-medium text-slate-700 dark:text-slate-300">user@gmail.com</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-slate-500">Account Created:</span>
+                            <span id="profile-created-at" class="font-medium text-slate-700 dark:text-slate-300">Loading...</span>
+                        </div>
                     </div>
-                </form>
+
+                    <!-- Editable Display Name Section -->
+                    <div class="border-t border-slate-200 dark:border-slate-700 pt-3">
+                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Edit Display Name</label>
+                        <form onsubmit="window.handleUpdateProfileName(event)" class="flex gap-2">
+                            <input type="text" id="edit-display-name-input" required class="flex-1 px-3 py-2 border dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            <button type="submit" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs rounded-xl font-medium shadow transition">Save</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -273,7 +299,7 @@
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 window.currentUser = user;
-                await checkUserProfile(user.uid);
+                await checkUserProfile(user);
                 setupPresence(user.uid);
             } else {
                 window.currentUser = null;
@@ -357,9 +383,9 @@
             document.getElementById('main-dashboard').classList.add('hidden');
         }
 
-        async function checkUserProfile(uid) {
+        async function checkUserProfile(user) {
             try {
-                const userDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'users', uid);
+                const userDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'users', user.uid);
                 const userSnap = await getDoc(userDocRef);
 
                 if (userSnap.exists()) {
@@ -371,6 +397,10 @@
                 } else {
                     document.getElementById('auth-screen').classList.add('hidden');
                     document.getElementById('username-screen').classList.remove('hidden');
+                    // Pre-fill display name if google provided one
+                    if (user.displayName) {
+                        document.getElementById('setup-display-name').value = user.displayName;
+                    }
                 }
             } catch (e) {
                 console.error("Error loading profile:", e);
@@ -438,6 +468,7 @@
                     username,
                     email: window.currentUser.email || '',
                     isOnline: true,
+                    createdAt: serverTimestamp(),
                     lastSeen: serverTimestamp()
                 };
                 await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'users', uid), profileData);
@@ -459,13 +490,31 @@
             loadConversations();
         }
 
-        window.openEditProfileModal = () => {
+        window.openProfileModal = () => {
+            if (!window.userData || !window.currentUser) return;
+            document.getElementById('profile-modal-name').textContent = window.userData.displayName;
+            document.getElementById('profile-modal-handle').textContent = '@' + window.userData.username;
+            document.getElementById('profile-modal-avatar').textContent = window.userData.displayName.charAt(0).toUpperCase();
+            
+            const providerId = window.currentUser.providerData[0]?.providerId || '';
+            const isGoogle = providerId.includes('google');
+            document.getElementById('profile-auth-provider').textContent = isGoogle ? 'Google OAuth' : 'Email & Password';
+            document.getElementById('profile-email').textContent = window.currentUser.email || 'No email associated';
+            
+            let createdDateStr = 'Recent';
+            if (window.userData.createdAt && typeof window.userData.createdAt.toDate === 'function') {
+                createdDateStr = window.userData.createdAt.toDate().toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+            } else if (window.currentUser.metadata?.creationTime) {
+                createdDateStr = new Date(window.currentUser.metadata.creationTime).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+            }
+            document.getElementById('profile-created-at').textContent = createdDateStr;
             document.getElementById('edit-display-name-input').value = window.userData.displayName;
-            document.getElementById('edit-profile-modal').classList.remove('hidden');
+
+            document.getElementById('profile-modal').classList.remove('hidden');
         };
 
-        window.closeEditProfileModal = () => {
-            document.getElementById('edit-profile-modal').classList.add('hidden');
+        window.closeProfileModal = () => {
+            document.getElementById('profile-modal').classList.add('hidden');
         };
 
         window.handleUpdateProfileName = async (event) => {
@@ -479,7 +528,7 @@
                 window.userData.displayName = newName;
                 document.getElementById('current-user-name').textContent = newName;
                 document.getElementById('current-user-avatar').textContent = newName.charAt(0).toUpperCase();
-                window.closeEditProfileModal();
+                window.closeProfileModal();
             } catch (e) {
                 alert("Error updating display name: " + e.message);
             }
@@ -547,8 +596,16 @@
                     participants: [window.currentUser.uid, recipientUid],
                     createdAt: serverTimestamp(),
                     lastMessage: 'Chat initialized',
-                    lastMessageTimestamp: serverTimestamp()
+                    lastMessageTimestamp: serverTimestamp(),
+                    clearedBy: []
                 });
+            } else {
+                // If this chat was cleared previously by current user, remove from clearedBy so messages can show fresh
+                const chatData = chatSnap.data();
+                if (chatData.clearedBy && chatData.clearedBy.includes(window.currentUser.uid)) {
+                    const updatedClearedBy = chatData.clearedBy.filter(id => id !== window.currentUser.uid);
+                    await updateDoc(chatRef, { clearedBy: updatedClearedBy });
+                }
             }
 
             window.openChatRoom(chatId, window.activeRecipient);
@@ -564,6 +621,10 @@
                 snapshot.forEach((docSnap) => {
                     const data = docSnap.data();
                     if (data.participants && data.participants.includes(window.currentUser.uid)) {
+                        // Skip if current user cleared this chat
+                        if (data.clearedBy && data.clearedBy.includes(window.currentUser.uid)) {
+                            return;
+                        }
                         chats.push({ id: docSnap.id, ...data });
                     }
                 });
@@ -763,7 +824,8 @@
                 
                 await updateDoc(chatRef, {
                     lastMessage: text,
-                    lastMessageTimestamp: serverTimestamp()
+                    lastMessageTimestamp: serverTimestamp(),
+                    clearedBy: [] // Reset clear status for both users upon new message
                 });
 
                 const messagesRef = collection(db, 'artifacts', appId, 'public', 'data', 'chats', window.activeChatId, 'messages');
@@ -777,25 +839,27 @@
             }
         };
 
-        // Complete Fresh Start Clear Chat feature
+        // Account-independent and fresh-start clearing feature
         window.clearCurrentChat = async () => {
             if (!window.activeChatId) return;
-            if (!confirm("Are you sure you want to clear this entire chat history? This will start a fresh conversation.")) return;
+            if (!confirm("Are you sure you want to clear this chat history? This will hide the conversation for you and give you a fresh start if you chat again.")) return;
 
             try {
-                const messagesRef = collection(db, 'artifacts', appId, 'public', 'data', 'chats', window.activeChatId, 'messages');
-                const snapshot = await getDocs(messagesRef);
-                
-                // Delete all message documents in this chat room
-                const deletePromises = snapshot.docs.map((docSnap) => deleteDoc(docSnap.ref));
-                await Promise.all(deletePromises);
-
-                // Update chat room metadata
                 const chatRef = doc(db, 'artifacts', appId, 'public', 'data', 'chats', window.activeChatId);
-                await updateDoc(chatRef, {
-                    lastMessage: 'Fresh start',
-                    lastMessageTimestamp: serverTimestamp()
-                });
+                const chatSnap = await getDoc(chatRef);
+
+                if (chatSnap.exists()) {
+                    const data = chatSnap.data();
+                    let clearedBy = data.clearedBy || [];
+                    if (!clearedBy.includes(window.currentUser.uid)) {
+                        clearedBy.push(window.currentUser.uid);
+                    }
+                    await updateDoc(chatRef, {
+                        clearedBy: clearedBy
+                    });
+                }
+
+                window.closeChatMobile();
             } catch (e) {
                 alert("Error clearing chat: " + e.message);
             }
