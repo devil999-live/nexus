@@ -73,20 +73,19 @@
             </div>
         </div>
 
-        <!-- USERNAME & EMOJI SETUP MODAL (First-time users only) -->
         <div id="username-screen" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
             <div class="bg-white dark:bg-slate-800 w-full max-w-md p-6 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700">
                 <h2 class="text-xl font-bold mb-2">Complete Your Profile</h2>
-                <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Choose a unique username and an emoji avatar to represent yourself.</p>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Choose your HD emoji avatar, display name, and a permanent unique username.</p>
                 
                 <form onsubmit="window.handleSaveUsername(event)" class="space-y-4">
-                    <!-- Emoji Picker for Avatar -->
+                    <!-- Emoji Avatar Picker -->
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Choose Profile Emoji Avatar</label>
+                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Profile Emoji Avatar (HD HD Keyboard Emoji)</label>
                         <div class="flex items-center gap-3">
                             <div id="setup-avatar-preview" class="w-14 h-14 rounded-2xl bg-brand-500/20 text-3xl flex items-center justify-center border-2 border-brand-500 shadow-inner">😎</div>
                             <input type="text" id="setup-emoji-input" maxlength="2" value="😎" required oninput="window.updateEmojiPreview(this.value, 'setup-avatar-preview')" class="w-24 px-3 py-2 border dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900 text-center text-xl focus:outline-none focus:ring-2 focus:ring-brand-500">
-                            <span class="text-xs text-slate-400">Type any keyboard emoji</span>
+                            <span class="text-xs text-slate-400">Type any emoji</span>
                         </div>
                     </div>
 
@@ -95,7 +94,7 @@
                         <input type="text" id="setup-display-name" required placeholder="e.g. Rohan Sharma" class="w-full px-3 py-2 border dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Unique Username (Permanent)</label>
+                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Unique Username (Permanent & Instagram Style)</label>
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">@</span>
                             <input type="text" id="setup-username" required oninput="window.checkUsernameAvailability(this.value)" placeholder="rohan_123" class="w-full pl-8 pr-3 py-2 border dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 lowercase">
@@ -109,7 +108,6 @@
             </div>
         </div>
 
-        <!-- MAIN DASHBOARD -->
         <div id="main-dashboard" class="hidden flex-1 flex h-full overflow-hidden">
             
             <!-- Sidebar: Active Chats & Navigation -->
@@ -146,13 +144,12 @@
                     <div id="search-results" class="hidden absolute left-3 right-3 top-16 z-30 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl max-h-48 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800"></div>
                 </div>
 
-                <!-- Active Conversations List -->
+                <!-- Active Conversations List with Delete / Remove Inbox Button -->
                 <div class="flex-1 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800" id="conversations-list">
                     <div class="p-6 text-center text-xs text-slate-400">No active chats yet. Search a username above to start chatting!</div>
                 </div>
             </aside>
 
-            <!-- Chat Window Area -->
             <main id="chat-window-container" class="hidden flex-1 flex-col h-full bg-slate-50 dark:bg-slate-950 flex">
                 <!-- Chat Header -->
                 <div class="p-4 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between shadow-sm">
@@ -210,7 +207,6 @@
             </div>
         </div>
 
-        <!-- CURRENT USER ACCOUNT DETAILS & PROFILE MODAL -->
         <div id="profile-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
             <div class="bg-white dark:bg-slate-800 w-full max-w-md p-6 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700">
                 <div class="flex justify-between items-center mb-4">
@@ -233,7 +229,7 @@
                             <span id="profile-auth-provider" class="font-semibold px-2 py-1 bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-300 rounded-md">Google</span>
                         </div>
                         <div class="flex justify-between items-center text-xs">
-                            <span class="text-slate-500">Email Address:</span>
+                            <span class="text-slate-500">Email Address / Gmail:</span>
                             <span id="profile-email" class="font-mono font-medium text-slate-700 dark:text-slate-300">user@gmail.com</span>
                         </div>
                         <div class="flex justify-between items-center text-xs">
@@ -246,7 +242,7 @@
                     <div class="border-t border-slate-200 dark:border-slate-700 pt-3">
                         <form onsubmit="window.handleUpdateProfile(event)" class="space-y-3">
                             <div>
-                                <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Edit Emoji Avatar</label>
+                                <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Edit Emoji Avatar (HD Keyboard Emoji)</label>
                                 <div class="flex items-center gap-3">
                                     <div id="edit-avatar-preview" class="w-10 h-10 rounded-xl bg-brand-500/20 text-2xl flex items-center justify-center border border-brand-500">😎</div>
                                     <input type="text" id="edit-emoji-input" maxlength="2" required oninput="window.updateEmojiPreview(this.value, 'edit-avatar-preview')" class="w-20 px-3 py-1.5 border dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900 text-center text-lg focus:outline-none focus:ring-2 focus:ring-brand-500">
@@ -265,7 +261,6 @@
             </div>
         </div>
 
-        <!-- CHAT PARTNER PROFILE MODAL -->
         <div id="recipient-profile-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
             <div class="bg-white dark:bg-slate-800 w-full max-w-sm p-6 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 text-center">
                 <div class="flex justify-between items-center mb-4">
@@ -427,7 +422,7 @@
         }
 
         function showAuthScreen() {
-            document.getElementById('auth-screen').classList.remove('hidden');
+            document.getElementById('auth-screen').classList.add('hidden');
             document.getElementById('username-screen').classList.add('hidden');
             document.getElementById('main-dashboard').classList.add('hidden');
         }
@@ -480,18 +475,24 @@
                 const unameSnap = await getDoc(unameRef);
 
                 if (unameSnap.exists()) {
-                    statusEl.textContent = "Username already taken! Please choose another.";
-                    statusEl.className = "mt-1.5 text-xs font-medium text-red-500";
-                    submitBtn.disabled = true;
-                    submitBtn.className = "w-full bg-slate-300 dark:bg-slate-700 text-slate-500 font-medium py-3 rounded-xl text-sm transition cursor-not-allowed";
-                    isUsernameValid = false;
-                } else {
-                    statusEl.textContent = "Username available!";
-                    statusEl.className = "mt-1.5 text-xs font-medium text-emerald-500";
-                    submitBtn.disabled = false;
-                    submitBtn.className = "w-full bg-brand-600 hover:bg-brand-700 text-white font-medium py-3 rounded-xl text-sm transition shadow-lg shadow-brand-600/20";
-                    isUsernameValid = true;
+                    // Check if the user associated actually exists in users collection (prevent ghost usernames)
+                    const uData = unameSnap.data();
+                    const checkUserSnap = await getDoc(doc(db, 'artifacts', appId, 'public', 'data', 'users', uData.uid));
+                    if (checkUserSnap.exists()) {
+                        statusEl.textContent = "Username already taken! Please choose another.";
+                        statusEl.className = "mt-1.5 text-xs font-medium text-red-500";
+                        submitBtn.disabled = true;
+                        submitBtn.className = "w-full bg-slate-300 dark:bg-slate-700 text-slate-500 font-medium py-3 rounded-xl text-sm transition cursor-not-allowed";
+                        isUsernameValid = false;
+                        return;
+                    }
                 }
+
+                statusEl.textContent = "Username available!";
+                statusEl.className = "mt-1.5 text-xs font-medium text-emerald-500";
+                submitBtn.disabled = false;
+                submitBtn.className = "w-full bg-brand-600 hover:bg-brand-700 text-white font-medium py-3 rounded-xl text-sm transition shadow-lg shadow-brand-600/20";
+                isUsernameValid = true;
             } catch (e) {
                 console.error("Error checking username:", e);
             }
@@ -510,8 +511,12 @@
                 const unameRef = doc(db, 'artifacts', appId, 'public', 'data', 'usernames', username);
                 const unameSnap = await getDoc(unameRef);
                 if (unameSnap.exists()) {
-                    alert("This username was just claimed by someone else. Please choose another.");
-                    return;
+                    const uData = unameSnap.data();
+                    const checkUserSnap = await getDoc(doc(db, 'artifacts', appId, 'public', 'data', 'users', uData.uid));
+                    if (checkUserSnap.exists()) {
+                        alert("This username was just claimed by someone else. Please choose another.");
+                        return;
+                    }
                 }
 
                 await setDoc(unameRef, { uid });
@@ -555,7 +560,7 @@
             
             const providerId = window.currentUser.providerData[0]?.providerId || '';
             const isGoogle = providerId.includes('google');
-            document.getElementById('profile-auth-provider').textContent = isGoogle ? 'Google OAuth' : 'Email & Password';
+            document.getElementById('profile-auth-provider').textContent = isGoogle ? 'Google OAuth (Sign in with Google)' : 'Email & Password (Gmail)';
             document.getElementById('profile-email').textContent = window.currentUser.email || 'No email associated';
             
             let createdDateStr = 'Recent';
@@ -641,7 +646,8 @@
                 let matches = [];
                 querySnapshot.forEach((docSnap) => {
                     const u = docSnap.data();
-                    if (u.uid !== window.currentUser.uid && (u.username.includes(cleanQuery) || u.uid.includes(cleanQuery) || u.displayName.toLowerCase().includes(cleanQuery))) {
+                    // Verify user document actually exists & isn't current user
+                    if (u.uid !== window.currentUser.uid && u.username && (u.username.includes(cleanQuery) || u.uid.includes(cleanQuery) || u.displayName.toLowerCase().includes(cleanQuery))) {
                         matches.push(u);
                     }
                 });
@@ -661,7 +667,7 @@
                     `).join('');
                     resultsContainer.classList.remove('hidden');
                 } else {
-                    resultsContainer.innerHTML = `<div class="p-3 text-xs text-slate-400 text-center">No users found</div>`;
+                    resultsContainer.innerHTML = `<div class="p-3 text-xs text-slate-400 text-center">No active users found</div>`;
                     resultsContainer.classList.remove('hidden');
                 }
             } catch (e) {
@@ -737,25 +743,35 @@
                         const userSnap = await getDoc(doc(db, 'artifacts', appId, 'public', 'data', 'users', otherUid));
                         if (userSnap.exists()) {
                             recipientInfo = userSnap.data();
+                        } else {
+                            continue; // Skip if user account was deleted
                         }
-                    } catch(e) {}
+                    } catch(e) {
+                        continue;
+                    }
 
                     const lastMsg = chat.lastMessage || 'Started conversation';
                     const timeStr = chat.lastMessageTimestamp ? new Date(chat.lastMessageTimestamp.toMillis()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
 
                     html += `
-                        <div onclick="window.openChatRoom('${chat.id}', { uid: '${otherUid}', displayName: '${escapeHtml(recipientInfo.displayName)}', username: '${recipientInfo.username}', avatarEmoji: '${recipientInfo.avatarEmoji || '👤'}' })" class="p-3.5 hover:bg-slate-50 dark:hover:bg-slate-700/50 cursor-pointer flex items-center gap-3 transition">
-                            <div class="relative">
-                                <div class="w-12 h-12 rounded-2xl bg-teal-600/20 text-2xl flex items-center justify-center shadow">${recipientInfo.avatarEmoji || '👤'}</div>
-                                <span class="absolute bottom-0 right-0 w-3.5 h-3.5 ${recipientInfo.isOnline ? 'bg-emerald-500' : 'bg-slate-400'} border-2 border-white dark:border-slate-800 rounded-full"></span>
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <div class="flex justify-between items-baseline mb-1">
-                                    <h4 class="font-bold text-sm truncate">${escapeHtml(recipientInfo.displayName)}</h4>
-                                    <span class="text-[10px] text-slate-400">${timeStr}</span>
+                        <div class="group relative flex items-center hover:bg-slate-50 dark:hover:bg-slate-700/50 transition">
+                            <div onclick="window.openChatRoom('${chat.id}', { uid: '${otherUid}', displayName: '${escapeHtml(recipientInfo.displayName)}', username: '${recipientInfo.username}', avatarEmoji: '${recipientInfo.avatarEmoji || '👤'}' })" class="flex-1 p-3.5 cursor-pointer flex items-center gap-3 min-w-0">
+                                <div class="relative">
+                                    <div class="w-12 h-12 rounded-2xl bg-teal-600/20 text-2xl flex items-center justify-center shadow">${recipientInfo.avatarEmoji || '👤'}</div>
+                                    <span class="absolute bottom-0 right-0 w-3.5 h-3.5 ${recipientInfo.isOnline ? 'bg-emerald-500' : 'bg-slate-400'} border-2 border-white dark:border-slate-800 rounded-full"></span>
                                 </div>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 truncate">${escapeHtml(lastMsg)}</p>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex justify-between items-baseline mb-1">
+                                        <h4 class="font-bold text-sm truncate">${escapeHtml(recipientInfo.displayName)}</h4>
+                                        <span class="text-[10px] text-slate-400">${timeStr}</span>
+                                    </div>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 truncate">${escapeHtml(lastMsg)}</p>
+                                </div>
                             </div>
+                            <!-- Delete Chat / Remove Inbox Button -->
+                            <button onclick="window.deleteChatInbox('${chat.id}', event)" title="Delete Chat from Inbox" class="absolute right-3 p-2 text-slate-400 hover:text-red-500 bg-white/80 dark:bg-slate-800/80 rounded-lg opacity-0 group-hover:opacity-100 transition shadow-sm">
+                                <i class="fa-solid fa-trash-can text-xs"></i>
+                            </button>
                         </div>
                     `;
                 }
@@ -764,6 +780,30 @@
                 console.error("Error loading conversations:", error);
             });
         }
+
+        window.deleteChatInbox = async (chatId, event) => {
+            event.stopPropagation();
+            if (!confirm("Are you sure you want to remove this conversation from your chat inbox?")) return;
+
+            try {
+                const chatRef = doc(db, 'artifacts', appId, 'public', 'data', 'chats', chatId);
+                const chatSnap = await getDoc(chatRef);
+                if (chatSnap.exists()) {
+                    const data = chatSnap.data();
+                    let clearedBy = data.clearedBy || [];
+                    if (!clearedBy.includes(window.currentUser.uid)) {
+                        clearedBy.push(window.currentUser.uid);
+                    }
+                    await updateDoc(chatRef, { clearedBy });
+                }
+
+                if (window.activeChatId === chatId) {
+                    window.closeChatMobile();
+                }
+            } catch (e) {
+                alert("Error deleting chat: " + e.message);
+            }
+        };
 
         window.openChatRoom = function(chatId, recipient) {
             window.activeChatId = chatId;
@@ -929,7 +969,7 @@
 
         window.clearCurrentChat = async () => {
             if (!window.activeChatId) return;
-            if (!confirm("Are you sure you want to clear this chat history? This will completely clear the messages for a fresh start.")) return;
+            if (!confirm("Are you sure you want to completely clear this chat history for a fresh start?")) return;
 
             try {
                 const messagesRef = collection(db, 'artifacts', appId, 'public', 'data', 'chats', window.activeChatId, 'messages');
@@ -939,7 +979,7 @@
 
                 const chatRef = doc(db, 'artifacts', appId, 'public', 'data', 'chats', window.activeChatId);
                 await updateDoc(chatRef, {
-                    lastMessage: 'Chat cleared',
+                    lastMessage: 'Fresh chat started',
                     lastMessageTimestamp: serverTimestamp(),
                     clearedBy: []
                 });
