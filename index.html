@@ -53,7 +53,7 @@
                     </button>
                     <div class="relative flex py-2 items-center">
                         <div class="flex-grow border-t border-slate-200 dark:border-slate-700"></div>
-                        <span class="flex-shrink mx-4 text-xs text-slate-400 uppercase">or email</span>
+                        <span class="flex-shrink mx-4 text-xs text-slate-400 uppercase">OR EMAIL</span>
                         <div class="flex-grow border-t border-slate-200 dark:border-slate-700"></div>
                     </div>
                     <form id="email-auth-form" onsubmit="window.handleEmailAuth(event)" class="space-y-3 text-left">
@@ -76,25 +76,25 @@
         <div id="username-screen" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
             <div class="bg-white dark:bg-slate-800 w-full max-w-md p-6 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700">
                 <h2 class="text-xl font-bold mb-2">Complete Your Profile</h2>
-                <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Choose your HD emoji avatar, display name, and a permanent unique username.</p>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Choose your HD emoji avatar, display name, and username.</p>
                 
                 <form onsubmit="window.handleSaveUsername(event)" class="space-y-4">
                     <!-- Emoji Avatar Picker -->
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Profile Emoji Avatar (HD Keyboard Emoji)</label>
+                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Profile Emoji Avatar</label>
                         <div class="flex items-center gap-3">
                             <div id="setup-avatar-preview" class="w-14 h-14 rounded-2xl bg-brand-500/20 text-3xl flex items-center justify-center border-2 border-brand-500 shadow-inner">😎</div>
                             <input type="text" id="setup-emoji-input" maxlength="2" value="😎" required oninput="window.updateEmojiPreview(this.value, 'setup-avatar-preview')" class="w-24 px-3 py-2 border dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900 text-center text-xl focus:outline-none focus:ring-2 focus:ring-brand-500">
-                            <span class="text-xs text-slate-400">Type any emoji</span>
+                            <span class="text-xs text-slate-400">Any Emoji</span>
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Display Name (Editable anytime)</label>
+                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Display Name</label>
                         <input type="text" id="setup-display-name" required placeholder="e.g. Rohan Sharma" class="w-full px-3 py-2 border dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Unique Username (Permanent & Instagram Style)</label>
+                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Unique Username</label>
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">@</span>
                             <input type="text" id="setup-username" required oninput="window.checkUsernameAvailability(this.value)" placeholder="rohan_123" class="w-full pl-8 pr-3 py-2 border dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 lowercase">
@@ -146,7 +146,7 @@
 
                 <!-- Active Conversations List with Delete Inbox Button -->
                 <div class="flex-1 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800" id="conversations-list">
-                    <div class="p-6 text-center text-xs text-slate-400">No active chats yet. Search a username above to start chatting!</div>
+                    <div class="p-6 text-center text-xs text-slate-400">No active chats yet. Search a Username Above to Start Chatting!</div>
                 </div>
             </aside>
 
@@ -161,7 +161,7 @@
                         </div>
                         <div>
                             <h3 class="font-bold text-sm group-hover:text-teal-600 transition flex items-center gap-1">
-                                <span id="active-chat-name">Select a Chat</span>
+                                <span id="active-chat-name">Select A Chat</span>
                                 <i class="fa-solid fa-circle-info text-[10px] text-slate-400"></i>
                             </h3>
                             <p class="text-xs text-slate-500 dark:text-slate-400" id="active-chat-status">Offline</p>
@@ -237,7 +237,7 @@
                     <div class="border-t border-slate-200 dark:border-slate-700 pt-3">
                         <form onsubmit="window.handleUpdateProfile(event)" class="space-y-3">
                             <div>
-                                <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Edit Emoji Avatar (HD Keyboard Emoji)</label>
+                                <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Edit Emoji Avatar</label>
                                 <div class="flex items-center gap-3">
                                     <div id="edit-avatar-preview" class="w-10 h-10 rounded-xl bg-brand-500/20 text-2xl flex items-center justify-center border border-brand-500">😎</div>
                                     <input type="text" id="edit-emoji-input" maxlength="2" required oninput="window.updateEmojiPreview(this.value, 'edit-avatar-preview')" class="w-20 px-3 py-1.5 border dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900 text-center text-lg focus:outline-none focus:ring-2 focus:ring-brand-500">
@@ -948,14 +948,14 @@
                                 <button onclick="window.addReaction('${m.id}', '🔥')" class="hover:scale-125 transition text-lg text-center">🔥</button>
                                 <button onclick="window.addReaction('${m.id}', '😂')" class="hover:scale-125 transition text-lg text-center">😂</button>
                                 <button onclick="window.addReaction('${m.id}', '😍')" class="hover:scale-125 transition text-lg text-center">😍</button>
-                                <button onclick="window.addReaction('${m.id}', '🎉')" class="hover:scale-125 transition text-lg text-center">🎉</button>
+                                <button onclick="window.addReaction('${m.id}', '🦚')" class="hover:scale-125 transition text-lg text-center">🦚</button>
                                 <button onclick="window.addReaction('${m.id}', '🙏')" class="hover:scale-125 transition text-lg text-center">🙏</button>
-                                <button onclick="window.addReaction('${m.id}', '👏')" class="hover:scale-125 transition text-lg text-center">👏</button>
-                                <button onclick="window.addReaction('${m.id}', '😢')" class="hover:scale-125 transition text-lg text-center">😢</button>
-                                <button onclick="window.addReaction('${m.id}', '😡')" class="hover:scale-125 transition text-lg text-center">😡</button>
-                                <button onclick="window.addReaction('${m.id}', '💡')" class="hover:scale-125 transition text-lg text-center">💡</button>
+                                <button onclick="window.addReaction('${m.id}', '😏')" class="hover:scale-125 transition text-lg text-center">😏</button>
+                                <button onclick="window.addReaction('${m.id}', '👌')" class="hover:scale-125 transition text-lg text-center">👌</button>
+                                <button onclick="window.addReaction('${m.id}', '🧿')" class="hover:scale-125 transition text-lg text-center">🧿</button>
+                                <button onclick="window.addReaction('${m.id}', '🪷')" class="hover:scale-125 transition text-lg text-center">🪷</button>
                                 <button onclick="window.addReaction('${m.id}', '🚀')" class="hover:scale-125 transition text-lg text-center">🚀</button>
-                                <button onclick="window.addReaction('${m.id}', '✨')" class="hover:scale-125 transition text-lg text-center">✨</button>
+                                <button onclick="window.addReaction('${m.id}', '🎉')" class="hover:scale-125 transition text-lg text-center">🎉</button>
                                 <button onclick="window.addReaction('${m.id}', '💯')" class="hover:scale-125 transition text-lg text-center">💯</button>
                                 <button onclick="window.addReaction('${m.id}', '⭐')" class="hover:scale-125 transition text-lg text-center">⭐</button>
                             </div>
