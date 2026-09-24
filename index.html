@@ -12,11 +12,10 @@
                 extend: {
                     colors: {
                         brand: {
-                            50: 'var(--brand-50)',
-                            100: 'var(--brand-100)',
-                            500: 'var(--brand-500)',
-                            600: 'var(--brand-600)',
-                            700: 'var(--brand-700)'
+                            50: '#f0fdf4',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d'
                         }
                     }
                 }
@@ -26,23 +25,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --brand-50: #f0fdf4;
-            --brand-100: #dcfce7;
-            --brand-500: #22c55e;
-            --brand-600: #16a34a;
-            --brand-700: #15803d;
-        }
         body { font-family: 'Inter', sans-serif; }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
         .dark ::-webkit-scrollbar-thumb { background: #475569; }
-        @keyframes pulse-glow {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.05); }
-        }
-        .animate-pulse-glow { animation: pulse-glow 2s infinite ease-in-out; }
     </style>
 </head>
 <body class="h-full bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-100 overflow-hidden">
@@ -86,13 +73,13 @@
             </div>
         </div>
 
-        <!-- PROFILE REGISTRATION MODAL -->
         <div id="username-screen" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
             <div class="bg-white dark:bg-slate-800 w-full max-w-md p-6 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700">
                 <h2 class="text-xl font-bold mb-2">Complete Your Profile</h2>
                 <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Choose your HD emoji avatar, display name, and a permanent unique username.</p>
                 
                 <form onsubmit="window.handleSaveUsername(event)" class="space-y-4">
+                    <!-- Emoji Avatar Picker -->
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Profile Emoji Avatar (HD Keyboard Emoji)</label>
                         <div class="flex items-center gap-3">
@@ -121,8 +108,9 @@
             </div>
         </div>
 
-        <!-- MAIN DASHBOARD -->
         <div id="main-dashboard" class="hidden flex-1 flex h-full overflow-hidden relative">
+            
+            <!-- Sidebar: Active Chats & Navigation -->
             <aside class="w-full h-full bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 flex flex-col z-10">
                 <!-- User Profile Header -->
                 <div class="p-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
@@ -138,7 +126,7 @@
                     </div>
                     <div class="flex items-center gap-1">
                         <button onclick="window.toggleDarkMode()" title="Toggle Theme" class="p-2 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 rounded-lg">
-                            <i id="theme-icon" class="fa-solid fa-moon"></i>
+                            <i class="fa-solid fa-moon"></i>
                         </button>
                         <button onclick="window.handleSignOut()" title="Sign Out" class="p-2 text-red-500 hover:text-red-600 rounded-lg">
                             <i class="fa-solid fa-right-from-bracket"></i>
@@ -152,17 +140,19 @@
                         <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400"><i class="fa-solid fa-magnifying-glass text-xs"></i></span>
                         <input type="text" id="user-search-input" oninput="window.searchUsers(this.value)" placeholder="Search username or user ID..." class="w-full pl-9 pr-3 py-2 bg-slate-100 dark:bg-slate-900 border-none rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-brand-500">
                     </div>
+                    <!-- Search Results dropdown -->
                     <div id="search-results" class="hidden absolute left-3 right-3 top-16 z-30 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl max-h-48 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800"></div>
                 </div>
 
-                <!-- Active Conversations List with Inbox Delete Button -->
+                <!-- Active Conversations List with Delete Inbox Button -->
                 <div class="flex-1 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800" id="conversations-list">
                     <div class="p-6 text-center text-xs text-slate-400">No active chats yet. Search a username above to start chatting!</div>
                 </div>
             </aside>
 
-            <!-- FULL SCREEN CHAT OVERLAY -->
+            <!-- FULL SCREEN CHAT OVERLAY FOR BOTH MOBILE & LAPTOP -->
             <main id="chat-window-container" class="hidden absolute inset-0 z-40 flex-col h-full bg-slate-50 dark:bg-slate-950 flex">
+                <!-- Chat Header -->
                 <div class="p-4 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between shadow-sm">
                     <div class="flex items-center gap-3 cursor-pointer group" onclick="window.openRecipientProfileModal()" title="View Partner Profile">
                         <div class="relative">
@@ -177,23 +167,21 @@
                             <p class="text-xs text-slate-500 dark:text-slate-400" id="active-chat-status">Offline</p>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <!-- In-Chat Search Bar Toggle -->
-                        <div class="relative hidden sm:flex items-center">
-                            <input type="text" id="in-chat-search" oninput="window.filterChatMessages(this.value)" placeholder="Search messages..." class="px-3 py-1.5 bg-slate-100 dark:bg-slate-900 border dark:border-slate-700 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-brand-500 w-40">
-                        </div>
-                        <div class="text-xs text-slate-400 font-mono hidden md:block" id="active-chat-uid" title="Unique User ID"></div>
+                    <div class="flex items-center gap-3">
+                        <div class="text-xs text-slate-400 font-mono hidden sm:block" id="active-chat-uid" title="Unique User ID"></div>
+                        <!-- Clear Chat Button (Fresh Start per user) -->
                         <button onclick="window.clearCurrentChat()" title="Clear Chat History" class="px-3 py-1.5 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 rounded-xl text-xs font-medium transition flex items-center gap-1.5">
                             <i class="fa-solid fa-trash-can"></i> <span class="hidden sm:inline">Clear Chat</span>
                         </button>
+                        <!-- Close Fullscreen Chat Button -->
                         <button onclick="window.closeChatWindow(event)" title="Close Chat" class="p-2.5 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-200 rounded-xl transition">
                             <i class="fa-solid fa-xmark text-lg"></i>
                         </button>
                     </div>
                 </div>
 
-                <!-- Messages Feed with Infinite Scroll Pagination -->
-                <div id="messages-container" class="flex-1 overflow-y-auto p-4 space-y-3 flex flex-col" onscroll="window.handleScrollPagination(event)"></div>
+                <!-- Messages Feed -->
+                <div id="messages-container" class="flex-1 overflow-y-auto p-4 space-y-3 flex flex-col"></div>
 
                 <!-- Typing indicator banner -->
                 <div id="typing-indicator" class="hidden px-4 py-1 text-xs text-slate-400 italic">User is typing...</div>
@@ -204,32 +192,8 @@
                     <button onclick="window.cancelReply()" class="text-slate-500 hover:text-red-500"><i class="fa-solid fa-xmark"></i></button>
                 </div>
 
-                <!-- Message Input Footer with Emoji Picker Toggle -->
-                <form id="message-form" onsubmit="window.sendMessage(event)" class="p-3 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 flex items-center gap-2 relative">
-                    <button type="button" onclick="window.toggleEmojiPicker()" title="Emoji Picker" class="p-3 text-slate-500 hover:text-brand-500 transition text-lg">
-                        <i class="fa-regular fa-face-smile"></i>
-                    </button>
-                    
-                    <!-- Built-In Emoji Picker Popup Grid -->
-                    <div id="emoji-picker-popup" class="hidden absolute bottom-20 left-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-3 shadow-2xl grid grid-cols-8 gap-2 z-50 w-72">
-                        <button type="button" onclick="window.insertEmoji('😊')" class="text-xl hover:scale-125 transition">😊</button>
-                        <button type="button" onclick="window.insertEmoji('😂')" class="text-xl hover:scale-125 transition">😂</button>
-                        <button type="button" onclick="window.insertEmoji('❤️')" class="text-xl hover:scale-125 transition">❤️</button>
-                        <button type="button" onclick="window.insertEmoji('👍')" class="text-xl hover:scale-125 transition">👍</button>
-                        <button type="button" onclick="window.insertEmoji('🔥')" class="text-xl hover:scale-125 transition">🔥</button>
-                        <button type="button" onclick="window.insertEmoji('😍')" class="text-xl hover:scale-125 transition">😍</button>
-                        <button type="button" onclick="window.insertEmoji('🎉')" class="text-xl hover:scale-125 transition">🎉</button>
-                        <button type="button" onclick="window.insertEmoji('🙏')" class="text-xl hover:scale-125 transition">🙏</button>
-                        <button type="button" onclick="window.insertEmoji('😎')" class="text-xl hover:scale-125 transition">😎</button>
-                        <button type="button" onclick="window.insertEmoji('🚀')" class="text-xl hover:scale-125 transition">🚀</button>
-                        <button type="button" onclick="window.insertEmoji('✨')" class="text-xl hover:scale-125 transition">✨</button>
-                        <button type="button" onclick="window.insertEmoji('💡')" class="text-xl hover:scale-125 transition">💡</button>
-                        <button type="button" onclick="window.insertEmoji('😢')" class="text-xl hover:scale-125 transition">😢</button>
-                        <button type="button" onclick="window.insertEmoji('👏')" class="text-xl hover:scale-125 transition">👏</button>
-                        <button type="button" onclick="window.insertEmoji('⭐')" class="text-xl hover:scale-125 transition">⭐</button>
-                        <button type="button" onclick="window.insertEmoji('💯')" class="text-xl hover:scale-125 transition">💯</button>
-                    </div>
-
+                <!-- Message Input Footer -->
+                <form id="message-form" onsubmit="window.sendMessage(event)" class="p-3 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 flex items-center gap-2">
                     <input type="text" id="message-input" oninput="window.handleTypingInput()" placeholder="Type your message..." autocomplete="off" class="flex-1 px-4 py-3 bg-slate-100 dark:bg-slate-900 border-none rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
                     <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white px-5 py-3 rounded-xl font-medium text-sm transition shadow-md shadow-brand-600/20">
                         <i class="fa-solid fa-paper-plane"></i>
@@ -238,7 +202,6 @@
             </main>
         </div>
 
-        <!-- PROFILE MODAL -->
         <div id="profile-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
             <div class="bg-white dark:bg-slate-800 w-full max-w-md p-6 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700">
                 <div class="flex justify-between items-center mb-4">
@@ -261,7 +224,7 @@
                             <span id="profile-auth-provider" class="font-semibold px-2 py-1 bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-300 rounded-md">Google</span>
                         </div>
                         <div class="flex justify-between items-center text-xs">
-                            <span class="text-slate-500">Email Address:</span>
+                            <span class="text-slate-500">Email Address / Gmail:</span>
                             <span id="profile-email" class="font-mono font-medium text-slate-700 dark:text-slate-300">user@gmail.com</span>
                         </div>
                         <div class="flex justify-between items-center text-xs">
@@ -270,22 +233,11 @@
                         </div>
                     </div>
 
-                    <!-- Custom Accent Color Picker -->
-                    <div class="border-t border-slate-200 dark:border-slate-700 pt-3">
-                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2">Accent Theme Color</label>
-                        <div class="flex gap-3">
-                            <button onclick="window.setAccentColor('emerald')" class="w-8 h-8 rounded-full bg-emerald-500 ring-2 ring-offset-2 ring-emerald-500 focus:outline-none"></button>
-                            <button onclick="window.setAccentColor('indigo')" class="w-8 h-8 rounded-full bg-indigo-600 focus:outline-none"></button>
-                            <button onclick="window.setAccentColor('rose')" class="w-8 h-8 rounded-full bg-rose-500 focus:outline-none"></button>
-                            <button onclick="window.setAccentColor('amber')" class="w-8 h-8 rounded-full bg-amber-500 focus:outline-none"></button>
-                        </div>
-                    </div>
-
                     <!-- Editable Display Name & Emoji Avatar Section -->
                     <div class="border-t border-slate-200 dark:border-slate-700 pt-3">
                         <form onsubmit="window.handleUpdateProfile(event)" class="space-y-3">
                             <div>
-                                <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Edit Emoji Avatar</label>
+                                <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Edit Emoji Avatar (HD Keyboard Emoji)</label>
                                 <div class="flex items-center gap-3">
                                     <div id="edit-avatar-preview" class="w-10 h-10 rounded-xl bg-brand-500/20 text-2xl flex items-center justify-center border border-brand-500">😎</div>
                                     <input type="text" id="edit-emoji-input" maxlength="2" required oninput="window.updateEmojiPreview(this.value, 'edit-avatar-preview')" class="w-20 px-3 py-1.5 border dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900 text-center text-lg focus:outline-none focus:ring-2 focus:ring-brand-500">
@@ -304,7 +256,6 @@
             </div>
         </div>
 
-        <!-- RECIPIENT PROFILE MODAL -->
         <div id="recipient-profile-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
             <div class="bg-white dark:bg-slate-800 w-full max-w-sm p-6 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 text-center">
                 <div class="flex justify-between items-center mb-4">
@@ -383,16 +334,6 @@
         let typingTimeout = null;
         let activeListeners = [];
         let heartbeatInterval = null;
-        let currentMessagesCache = [];
-        let displayMessageLimit = 25;
-
-        // Apply persisted Theme and Accent on Load
-        const savedTheme = localStorage.getItem('nexus_theme');
-        if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        }
-        const savedAccent = localStorage.getItem('nexus_accent') || 'emerald';
-        window.setAccentColor(savedAccent, false);
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -409,15 +350,26 @@
 
         function setupPresence(uid) {
             const userDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'users', uid);
+            
             async function updateOnlineStatus(isOnline) {
                 try {
-                    await updateDoc(userDocRef, { isOnline: isOnline, lastSeen: serverTimestamp() });
+                    await updateDoc(userDocRef, {
+                        isOnline: isOnline,
+                        lastSeen: serverTimestamp()
+                    });
                 } catch(e) {}
             }
+
             updateOnlineStatus(true);
+
             if (heartbeatInterval) clearInterval(heartbeatInterval);
-            heartbeatInterval = setInterval(() => { updateOnlineStatus(true); }, 30000);
-            window.addEventListener('beforeunload', () => { updateOnlineStatus(false); });
+            heartbeatInterval = setInterval(() => {
+                updateOnlineStatus(true);
+            }, 30000);
+
+            window.addEventListener('beforeunload', () => {
+                updateOnlineStatus(false);
+            });
         }
 
         window.handleGoogleSignIn = async () => {
@@ -588,6 +540,7 @@
             document.getElementById('current-user-name').textContent = window.userData.displayName;
             document.getElementById('current-user-handle').textContent = '@' + window.userData.username;
             document.getElementById('current-user-avatar').textContent = window.userData.avatarEmoji || '😎';
+
             loadConversations();
         }
 
@@ -601,7 +554,7 @@
             
             const providerId = window.currentUser.providerData[0]?.providerId || '';
             const isGoogle = providerId.includes('google');
-            document.getElementById('profile-auth-provider').textContent = isGoogle ? 'Google OAuth' : 'Email & Password';
+            document.getElementById('profile-auth-provider').textContent = isGoogle ? 'Google OAuth (Sign in with Google)' : 'Email & Password (Gmail)';
             document.getElementById('profile-email').textContent = window.currentUser.email || 'No email associated';
             
             let createdDateStr = 'Recent';
@@ -638,31 +591,6 @@
             } catch (e) {
                 alert("Error updating profile: " + e.message);
             }
-        };
-
-        window.setAccentColor = (colorName, save = true) => {
-            const palettes = {
-                emerald: { '50': '#f0fdf4', '100': '#dcfce7', '500': '#22c55e', '600': '#16a34a', '700': '#15803d' },
-                indigo: { '50': '#eef2ff', '100': '#e0e7ff', '500': '#6366f1', '600': '#4f46e5', '700': '#4338ca' },
-                rose: { '50': '#fff1f2', '100': '#ffe4e6', '500': '#f43f5e', '600': '#e11d48', '700': '#be123c' },
-                amber: { '50': '#fffbeb', '100': '#fef3c7', '500': '#f59e0b', '600': '#d97706', '700': '#b45309' }
-            };
-            const p = palettes[colorName] || palettes.emerald;
-            const root = document.documentElement;
-            root.style.setProperty('--brand-50', p['50']);
-            root.style.setProperty('--brand-100', p['100']);
-            root.style.setProperty('--brand-500', p['500']);
-            root.style.setProperty('--brand-600', p['600']);
-            root.style.setProperty('--brand-700', p['700']);
-
-            if (save) {
-                localStorage.setItem('nexus_accent', colorName);
-            }
-        };
-
-        window.toggleDarkMode = () => {
-            const isDark = document.documentElement.classList.toggle('dark');
-            localStorage.setItem('nexus_theme', isDark ? 'dark' : 'light');
         };
 
         window.openRecipientProfileModal = async () => {
@@ -712,6 +640,7 @@
                 let matches = [];
                 querySnapshot.forEach((docSnap) => {
                     const u = docSnap.data();
+                    // STRICT EXISTENCE CHECK: Ensure account exists and is not current user
                     if (u && u.uid && u.uid !== window.currentUser.uid && u.username) {
                         if (u.username.includes(cleanQuery) || u.uid.includes(cleanQuery) || (u.displayName && u.displayName.toLowerCase().includes(cleanQuery))) {
                             matches.push(u);
@@ -835,6 +764,7 @@
                                     <p class="text-xs text-slate-500 dark:text-slate-400 truncate">${escapeHtml(lastMsg)}</p>
                                 </div>
                             </div>
+                            <!-- Delete Chat Inbox Button -->
                             <button onclick="window.deleteChatInbox('${chat.id}', event)" title="Delete Chat from Inbox" class="absolute right-3 p-2 text-slate-400 hover:text-red-500 bg-white/80 dark:bg-slate-800/80 rounded-lg opacity-0 group-hover:opacity-100 transition shadow-sm">
                                 <i class="fa-solid fa-trash-can text-xs"></i>
                             </button>
@@ -874,8 +804,8 @@
         window.openChatRoom = function(chatId, recipient) {
             window.activeChatId = chatId;
             window.activeRecipient = recipient;
-            displayMessageLimit = 25;
 
+            // Open Full Screen Chat Window
             const chatWindow = document.getElementById('chat-window-container');
             chatWindow.classList.remove('hidden');
             chatWindow.classList.add('flex');
@@ -883,14 +813,6 @@
             document.getElementById('active-chat-name').textContent = recipient.displayName;
             document.getElementById('active-chat-avatar').textContent = recipient.avatarEmoji || '👤';
             document.getElementById('active-chat-uid').textContent = `ID: ${recipient.uid.substring(0,8)}...`;
-
-            // Load Draft Autosave if exists
-            const savedDraft = localStorage.getItem(`nexus_draft_${chatId}`);
-            if (savedDraft) {
-                document.getElementById('message-input').value = savedDraft;
-            } else {
-                document.getElementById('message-input').value = '';
-            }
 
             onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'users', recipient.uid), (userSnap) => {
                 if (userSnap.exists()) {
@@ -950,7 +872,6 @@
                     return tA - tB;
                 });
 
-                currentMessagesCache = msgs;
                 renderMessages(msgs);
             }, (err) => {
                 console.error("Error fetching messages:", err);
@@ -973,21 +894,11 @@
             activeListeners.push(unsubTyping);
         };
 
-        // Infinite Scroll Pagination Handler
-        window.handleScrollPagination = (e) => {
-            const container = e.target;
-            if (container.scrollTop === 0 && currentMessagesCache.length > displayMessageLimit) {
-                displayMessageLimit += 20;
-                renderMessages(currentMessagesCache, false);
-            }
-        };
-
-        function renderMessages(msgs, scrollToBottom = true) {
+        function renderMessages(msgs) {
             const container = document.getElementById('messages-container');
-            const sliceMsgs = msgs.slice(-displayMessageLimit);
             let html = '';
 
-            sliceMsgs.forEach((m) => {
+            msgs.forEach((m) => {
                 const isMe = m.senderId === window.currentUser.uid;
                 const time = m.timestamp ? new Date(m.timestamp.toMillis()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Sending...';
                 
@@ -1001,6 +912,7 @@
                     reactionsHtml = `<div class="flex gap-1 mt-1 flex-wrap">${Object.entries(m.reactions).map(([uid, emoji]) => `<span class="inline-flex items-center bg-white/80 dark:bg-slate-700/80 px-1.5 py-0.5 rounded-full text-xs shadow-sm">${emoji}</span>`).join('')}</div>`;
                 }
 
+                // WhatsApp style tick status
                 let tickHtml = '';
                 if (isMe) {
                     const status = m.status || 'sent';
@@ -1014,7 +926,7 @@
                 }
 
                 html += `
-                    <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'} group message-item" data-text="${escapeHtml(m.text).toLowerCase()}">
+                    <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'} group">
                         <div class="max-w-[75%] rounded-2xl px-4 py-2.5 text-sm shadow-sm relative ${isMe ? 'bg-brand-600 text-white rounded-br-none' : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-bl-none border border-slate-200 dark:border-slate-700'}">
                             ${replyHtml}
                             <div class="break-words">${escapeHtml(m.text)}</div>
@@ -1029,7 +941,7 @@
                                 <button onclick="window.toggleReactionMenu('${m.id}')" title="React" class="p-1 hover:bg-slate-100 dark:hover:bg-slate-700 rounded text-xs text-slate-500"><i class="fa-solid fa-face-smile"></i></button>
                             </div>
 
-                            <!-- 15 Popular Reaction Emojis Menu -->
+                            <!-- Expanded 15 Popular Reaction Emojis Menu -->
                             <div id="reaction-menu-${m.id}" class="hidden absolute ${isMe ? 'right-0' : 'left-0'} -top-16 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-2 shadow-2xl grid grid-cols-5 gap-1.5 z-30 w-52">
                                 <button onclick="window.addReaction('${m.id}', '❤️')" class="hover:scale-125 transition text-lg text-center">❤️</button>
                                 <button onclick="window.addReaction('${m.id}', '👍')" class="hover:scale-125 transition text-lg text-center">👍</button>
@@ -1053,26 +965,9 @@
             });
 
             container.innerHTML = html;
-            if (scrollToBottom) {
-                container.scrollTop = container.scrollHeight;
-            }
+            container.scrollTop = container.scrollHeight;
         }
 
-        // In-Chat Keyword Search Filter
-        window.filterChatMessages = (queryVal) => {
-            const q = queryVal.trim().toLowerCase();
-            const items = document.querySelectorAll('.message-item');
-            items.forEach(item => {
-                const text = item.getAttribute('data-text');
-                if (!q || text.includes(q)) {
-                    item.style.display = '';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        };
-
-        // Optimistic UI Message Sending & Draft Autosave
         window.sendMessage = async (event) => {
             event.preventDefault();
             const input = document.getElementById('message-input');
@@ -1080,20 +975,6 @@
             if (!text || !window.activeChatId) return;
 
             input.value = '';
-            localStorage.removeItem(`nexus_draft_${window.activeChatId}`);
-
-            const tempId = 'temp_' + Date.now();
-            const optimisticMsg = {
-                id: tempId,
-                senderId: window.currentUser.uid,
-                text,
-                status: 'sent',
-                timestamp: null
-            };
-
-            currentMessagesCache.push(optimisticMsg);
-            renderMessages(currentMessagesCache);
-
             const msgData = {
                 senderId: window.currentUser.uid,
                 text,
@@ -1109,6 +990,7 @@
 
             try {
                 const chatRef = doc(db, 'artifacts', appId, 'public', 'data', 'chats', window.activeChatId);
+                
                 await updateDoc(chatRef, {
                     lastMessage: text,
                     lastMessageTimestamp: serverTimestamp(),
@@ -1151,9 +1033,6 @@
 
         window.handleTypingInput = async () => {
             if (!window.activeChatId) return;
-            const text = document.getElementById('message-input').value;
-            localStorage.setItem(`nexus_draft_${window.activeChatId}`, text);
-
             try {
                 await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'chats', window.activeChatId), {
                     [`typing.${window.currentUser.uid}`]: true
@@ -1166,18 +1045,6 @@
                     });
                 }, 2000);
             } catch(e) {}
-        };
-
-        window.toggleEmojiPicker = () => {
-            const popup = document.getElementById('emoji-picker-popup');
-            popup.classList.toggle('hidden');
-        };
-
-        window.insertEmoji = (emoji) => {
-            const input = document.getElementById('message-input');
-            input.value += emoji;
-            document.getElementById('emoji-picker-popup').classList.add('hidden');
-            input.focus();
         };
 
         window.setReplyMessage = (id, text) => {
@@ -1219,6 +1086,10 @@
             chatWindow.classList.add('hidden');
             chatWindow.classList.remove('flex');
             window.activeChatId = null;
+        };
+
+        window.toggleDarkMode = () => {
+            document.documentElement.classList.toggle('dark');
         };
 
         function escapeHtml(str) {
