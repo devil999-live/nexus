@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nexus Chat - Secure Messaging</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -74,7 +73,7 @@
             </div>
         </div>
 
-        <!-- USERNAME SETUP MODAL (Instagram Style Uniqueness Enforcement) -->
+        <!-- USERNAME SETUP MODAL (First-time users only) -->
         <div id="username-screen" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
             <div class="bg-white dark:bg-slate-800 w-full max-w-md p-6 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700">
                 <h2 class="text-xl font-bold mb-2">Claim Your Unique Username</h2>
@@ -137,7 +136,7 @@
                     <div id="search-results" class="hidden absolute left-3 right-3 top-16 z-30 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl max-h-48 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800"></div>
                 </div>
 
-                <!-- Active Conversations List (Isolated per account) -->
+                <!-- Active Conversations List -->
                 <div class="flex-1 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800" id="conversations-list">
                     <div class="p-6 text-center text-xs text-slate-400">No active chats yet. Search a username above to start chatting!</div>
                 </div>
@@ -161,7 +160,7 @@
                     <div class="flex items-center gap-3">
                         <div class="text-xs text-slate-400 font-mono hidden sm:block" id="active-chat-uid" title="Unique User ID"></div>
                         <!-- Clear Chat Button -->
-                        <button onclick="window.clearCurrentChat()" title="Clear Chat for Me" class="px-3 py-1.5 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 rounded-xl text-xs font-medium transition flex items-center gap-1.5">
+                        <button onclick="window.clearCurrentChat()" title="Clear Chat History" class="px-3 py-1.5 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 rounded-xl text-xs font-medium transition flex items-center gap-1.5">
                             <i class="fa-solid fa-trash-can"></i> <span class="hidden sm:inline">Clear Chat</span>
                         </button>
                     </div>
@@ -237,16 +236,14 @@
             getDoc, 
             setDoc, 
             updateDoc, 
+            deleteDoc,
             onSnapshot, 
             collection, 
             getDocs,
             addDoc,
-            serverTimestamp,
-            arrayUnion,
-            arrayRemove
+            serverTimestamp
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Firebase configuration for nexus-272c2
         const firebaseConfig = {
             apiKey: "AIzaSyAeul8uJ8FN7EaTgyuTi76O1MJG4j-3UCQ",
             authDomain: "nexus-272c2.firebaseapp.com",
@@ -258,14 +255,12 @@
 
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'nexus-chat-app';
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         setPersistence(auth, browserLocalPersistence).catch(() => {});
         const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
 
-        // Global State variables
         window.currentUser = null;
         window.userData = null;
         window.activeChatId = null;
@@ -275,7 +270,6 @@
         let activeListeners = [];
         let heartbeatInterval = null;
 
-        // Authentication State Listener
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 window.currentUser = user;
@@ -289,7 +283,6 @@
             }
         });
 
-        // Online Presence Heartbeat System
         function setupPresence(uid) {
             const userDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'users', uid);
             
@@ -307,27 +300,25 @@
             if (heartbeatInterval) clearInterval(heartbeatInterval);
             heartbeatInterval = setInterval(() => {
                 updateOnlineStatus(true);
-            }, 30000); // Heartbeat every 30 seconds
+            }, 30000);
 
             window.addEventListener('beforeunload', () => {
                 updateOnlineStatus(false);
             });
         }
 
-        // Handle Google Sign In with explicit error reporting
         window.handleGoogleSignIn = async () => {
             try {
                 await signInWithPopup(auth, googleProvider);
             } catch (error) {
                 if (error.code === 'auth/unauthorized-domain') {
-                    showAuthError("Unauthorized Domain: Please add your Netlify domain to your Firebase Console under Authentication > Settings > Authorized domains.");
+                    showAuthError("Unauthorized Domain: Please add your domain to your Firebase Console under Authentication > Settings > Authorized domains.");
                 } else {
                     showAuthError(error.message);
                 }
             }
         };
 
-        // Handle Email Auth (Login or Register)
         window.handleEmailAuth = async (event) => {
             event.preventDefault();
             const email = document.getElementById('auth-email').value;
@@ -494,7 +485,6 @@
             }
         };
 
-        // Search Users Function
         window.searchUsers = async (queryVal) => {
             const resultsContainer = document.getElementById('search-results');
             const cleanQuery = queryVal.trim().toLowerCase();
@@ -557,15 +547,13 @@
                     participants: [window.currentUser.uid, recipientUid],
                     createdAt: serverTimestamp(),
                     lastMessage: 'Chat initialized',
-                    lastMessageTimestamp: serverTimestamp(),
-                    clearedBy: []
+                    lastMessageTimestamp: serverTimestamp()
                 });
             }
 
             window.openChatRoom(chatId, window.activeRecipient);
         };
 
-        // Load isolated conversations list for current user account
         function loadConversations() {
             const chatsRef = collection(db, 'artifacts', appId, 'public', 'data', 'chats');
             
@@ -576,11 +564,7 @@
                 snapshot.forEach((docSnap) => {
                     const data = docSnap.data();
                     if (data.participants && data.participants.includes(window.currentUser.uid)) {
-                        // Check if this chat was cleared by the current user
-                        const clearedBy = data.clearedBy || [];
-                        if (!clearedBy.includes(window.currentUser.uid)) {
-                            chats.push({ id: docSnap.id, ...data });
-                        }
+                        chats.push({ id: docSnap.id, ...data });
                     }
                 });
 
@@ -645,7 +629,6 @@
             document.getElementById('active-chat-avatar').textContent = recipient.displayName.charAt(0).toUpperCase();
             document.getElementById('active-chat-uid').textContent = `ID: ${recipient.uid.substring(0,8)}...`;
 
-            // Listen to recipient status in real time
             onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'users', recipient.uid), (userSnap) => {
                 if (userSnap.exists()) {
                     const uData = userSnap.data();
@@ -778,11 +761,9 @@
             try {
                 const chatRef = doc(db, 'artifacts', appId, 'public', 'data', 'chats', window.activeChatId);
                 
-                // If the user previously cleared this chat, sending a new message un-clears it for them
                 await updateDoc(chatRef, {
                     lastMessage: text,
-                    lastMessageTimestamp: serverTimestamp(),
-                    clearedBy: arrayRemove(window.currentUser.uid)
+                    lastMessageTimestamp: serverTimestamp()
                 });
 
                 const messagesRef = collection(db, 'artifacts', appId, 'public', 'data', 'chats', window.activeChatId, 'messages');
@@ -796,17 +777,25 @@
             }
         };
 
-        // Clear Chat for Me feature (does not delete messages for the other person)
+        // Complete Fresh Start Clear Chat feature
         window.clearCurrentChat = async () => {
             if (!window.activeChatId) return;
-            if (!confirm("Clear chat history for your account? The other person will still have their messages until they clear theirs.")) return;
+            if (!confirm("Are you sure you want to clear this entire chat history? This will start a fresh conversation.")) return;
 
             try {
+                const messagesRef = collection(db, 'artifacts', appId, 'public', 'data', 'chats', window.activeChatId, 'messages');
+                const snapshot = await getDocs(messagesRef);
+                
+                // Delete all message documents in this chat room
+                const deletePromises = snapshot.docs.map((docSnap) => deleteDoc(docSnap.ref));
+                await Promise.all(deletePromises);
+
+                // Update chat room metadata
                 const chatRef = doc(db, 'artifacts', appId, 'public', 'data', 'chats', window.activeChatId);
                 await updateDoc(chatRef, {
-                    clearedBy: arrayUnion(window.currentUser.uid)
+                    lastMessage: 'Fresh start',
+                    lastMessageTimestamp: serverTimestamp()
                 });
-                window.closeChatMobile();
             } catch (e) {
                 alert("Error clearing chat: " + e.message);
             }
