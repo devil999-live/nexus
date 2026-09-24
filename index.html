@@ -627,52 +627,56 @@
         };
 
         window.searchUsers = async (queryVal) => {
-            const resultsContainer = document.getElementById('search-results');
-            const cleanQuery = queryVal.trim().toLowerCase();
+    const resultsContainer = document.getElementById('search-results');
+    const cleanQuery = queryVal.trim().toLowerCase();
 
-            if (!cleanQuery) {
-                resultsContainer.classList.add('hidden');
-                resultsContainer.innerHTML = '';
-                return;
-            }
+    if (!cleanQuery) {
+        resultsContainer.classList.add('hidden');
+        resultsContainer.innerHTML = '';
+        return;
+    }
 
-            try {
-                const usersRef = collection(db, 'artifacts', appId, 'public', 'data', 'users');
-                const querySnapshot = await getDocs(usersRef);
-                
-                let matches = [];
-                querySnapshot.forEach((docSnap) => {
-                    const u = docSnap.data();
-                    // STRICT EXISTENCE CHECK: Ensure account exists and is not current user
-                    if (u && u.uid && u.uid !== window.currentUser.uid && u.username) {
-                        if (u.username.includes(cleanQuery) || u.uid.includes(cleanQuery) || (u.displayName && u.displayName.toLowerCase().includes(cleanQuery))) {
-                            matches.push(u);
-                        }
+    try {
+        const usersRef = collection(db, 'artifacts', appId, 'public', 'data', 'users');
+        const querySnapshot = await getDocs(usersRef);
+        
+        let matches = [];
+        for (const docSnap of querySnapshot.docs) {
+            const u = docSnap.data();
+            // STRICT VALIDATION: Must have a valid UID, not be current user, and have a real profile
+            if (u && u.uid && u.uid !== window.currentUser.uid && u.username) {
+                // Double check that the user document genuinely exists and has data
+                const liveCheckSnap = await getDoc(doc(db, 'artifacts', appId, 'public', 'data', 'users', u.uid));
+                if (liveCheckSnap.exists()) {
+                    if (u.username.toLowerCase().includes(cleanQuery) || u.uid.toLowerCase().includes(cleanQuery) || (u.displayName && u.displayName.toLowerCase().includes(cleanQuery))) {
+                        matches.push(u);
                     }
-                });
-
-                if (matches.length > 0) {
-                    resultsContainer.innerHTML = matches.map(u => `
-                        <div onclick="window.startChatWithUser('${u.uid}', '${escapeHtml(u.displayName || '')}', '${u.username}', '${u.avatarEmoji || '👤'}')" class="p-3 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer flex items-center justify-between">
-                            <div class="flex items-center gap-2.5">
-                                <div class="w-9 h-9 rounded-xl bg-brand-500/20 text-xl flex items-center justify-center">${u.avatarEmoji || '👤'}</div>
-                                <div>
-                                    <div class="text-xs font-bold">${escapeHtml(u.displayName || '')}</div>
-                                    <div class="text-[10px] text-slate-400">@${u.username}</div>
-                                </div>
-                            </div>
-                            <span class="text-xs text-brand-500 font-medium">Chat <i class="fa-solid fa-arrow-right text-[10px]"></i></span>
-                        </div>
-                    `).join('');
-                    resultsContainer.classList.remove('hidden');
-                } else {
-                    resultsContainer.innerHTML = `<div class="p-3 text-xs text-slate-400 text-center">No active users found</div>`;
-                    resultsContainer.classList.remove('hidden');
                 }
-            } catch (e) {
-                console.error("Search error:", e);
             }
-        };
+        }
+
+        if (matches.length > 0) {
+            resultsContainer.innerHTML = matches.map(u => `
+                <div onclick="window.startChatWithUser('${u.uid}', '${escapeHtml(u.displayName || '')}', '${u.username}', '${u.avatarEmoji || '👤'}')" class="p-3 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-xl bg-brand-500/20 text-xl flex items-center justify-center">${u.avatarEmoji || '👤'}</div>
+                        <div>
+                            <div class="text-xs font-bold">${escapeHtml(u.displayName || '')}</div>
+                            <div class="text-[10px] text-slate-400">@${u.username}</div>
+                        </div>
+                    </div>
+                    <span class="text-xs text-brand-500 font-medium">Chat <i class="fa-solid fa-arrow-right text-[10px]"></i></span>
+                </div>
+            `).join('');
+            resultsContainer.classList.remove('hidden');
+        } else {
+            resultsContainer.innerHTML = `<div class="p-3 text-xs text-slate-400 text-center">No active users found</div>`;
+            resultsContainer.classList.remove('hidden');
+        }
+    } catch (e) {
+        console.error("Search error:", e);
+    }
+};
 
         window.startChatWithUser = async (recipientUid, recipientName, recipientUsername, recipientEmoji) => {
             document.getElementById('search-results').classList.add('hidden');
